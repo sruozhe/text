@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>關於我們 - 中一翔鷹</title>
+  <link rel="stylesheet" href="css/about.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      color: #f0f0f0;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    h1, h2, h3, p {
+      text-align: center;
+    }
+    .container {
+      padding: 70px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Add subtle pattern overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 20px 20px;
+      z-index: 0;
+      pointer-events: none;
+    }
+    h1 {
+      font-size: 3.2em;
+      margin-bottom: 25px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(45deg, #ffffff, #e0e0e0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #4a8f3c;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 1.2em;
+      max-width: 800px;
+      margin: 0 auto 30px;
+      line-height: 1.6;
+    }
+    .team-section {
+      margin: 40px 0;
+    }
+    .team-section h3 {
+      color: #4a8f3c;
+      margin: 40px 0 20px;
+      text-align: left;
+      border-bottom: 2px solid #4a8f3c;
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+      justify-items: center;
+    }
+    .team-member {
+      background: rgba(30, 30, 30, 0.7);
+      padding: 20px 15px;
+      border-radius: 10px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: left;
+      width: 140px;
+      box-sizing: border-box;
+    }
+    .team-member:hover {
+      transform: translateY(-3px);
+      background: rgba(40, 40, 40, 0.8);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+    .team-member img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 10px;
+      display: block;
+      border: 2px solid #4a8f3c;
+      transition: all 0.3s ease;
+    }
+    .team-section:not(.collapsed) .team-member {
+      width: 180px;
+      text-align: left;
+    }
+    .team-section:not(.collapsed) .team-member img {
+      width: 120px;
+      height: 120px;
+      border-width: 3px;
+      margin-bottom: 15px;
+    }
+    .team-member:hover img {
+      transform: scale(1.05);
+    }
+    .team-member h3 {
+      margin: 5px 0 3px;
+      font-size: 1em;
+      color: #fff;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .team-section:not(.collapsed) .team-member h3 {
+      margin: 10px 0 5px;
+      font-size: 1.1em;
+    }
+    .team-member p {
+      margin: 0;
+      font-size: 0.9em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #ccc;
+      transition: all 0.3s ease;
+    }
+    .team-section:not(.collapsed) .team-member p {
+      font-size: 1em;
+    }
+
+    .button {
+      background: linear-gradient(45deg, #4a8f3c, #5aae4a);
+      color: #ffffff;
+      padding: 14px 35px;
+      margin: 25px 10px;
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 50px;
+      display: inline-block;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: none;
+      box-shadow: 0 4px 15px rgba(74, 143, 60, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(74, 143, 60, 0.4);
+      background: linear-gradient(45deg, #5aae4a, #4a8f3c);
+    }
+    
+    .button:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 10px rgba(74, 143, 60, 0.3);
+    }
+    .stats-container {
+      display: flex;
+      justify-content: space-around;
+      margin: 40px 0;
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      margin: 15px;
+    }
+    .stat-number {
+      font-size: 2.8em;
+      font-weight: bold;
+      background: linear-gradient(45deg, #4a8f3c, #5aae4a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 5px;
+      text-shadow: 0 2px 10px rgba(74, 143, 60, 0.3);
+    }
+    footer {
+      margin-top: 80px;
+      color: #aaa;
+      padding: 30px 0;
+      background: rgba(15, 15, 15, 0.8);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.95em;
+    }
+    @media (max-width: 768px) {
+      .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 480px) {
+      .team-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .toggle-section {
+      background: rgba(30, 30, 30, 0.7);
+      padding: 10px 20px;
+      border-radius: 8px;
+      margin: 10px 0;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .toggle-section h3 {
+      margin: 10px 0;
+    }
+    .toggle-icon {
+      font-size: 0.8em;
+      transition: transform 0.3s ease;
+    }
+    .team-section.collapsed .team-grid {
+      display: none;
+    }
+    .team-section.collapsed .toggle-icon {
+      transform: rotate(-90deg);
+    }
+  </style>
+  <script>
+    // 折疊/展開整個期別的成員
+    document.addEventListener('DOMContentLoaded', function() {
+      // 預設折疊所有期別
+      document.querySelectorAll('.team-section').forEach(section => {
+        section.classList.add('collapsed');
+      });
+      
+      const sections = document.querySelectorAll('.team-section h3');
+      sections.forEach(section => {
+        section.addEventListener('click', function() {
+          const parent = this.parentElement;
+          parent.classList.toggle('collapsed');
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+  <!-- 語言切換器 -->
+   <!-- 導航欄 -->
+   <nav class="main-nav">
+    <div class="nav-container">
+        <a href="index.html" class="logo">照亮雨林</a>
+        <div class="nav-links">
+            <a href="index.html">首頁</a>
+            <a href="about.html" class="active">關於我們</a>
+            <a href="news.html">最新消息</a>
+            <a href="#donate" class="donate-btn">捐款支持</a>
+            <div class="language-switcher">
+                <a href="about.html"class="active">中文</a>
+                <a href="about-en.html">EN</a>
+            </div>
+        </div>
+        <button class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</nav>
+
+
+  <div class="container reveal fade-in">
+    <h1 class="reveal fade-in">關於 照亮雨林</h1>
+    <p class="reveal fade-in delay-1"><strong>做一件讓世界更美麗的事</strong></p>
+
+    <div class="reveal fade-in">
+      <h2>雨林面臨的困境</h2>
+      <h3>雨林--被人們稱為地球之肺</h3>
+      <p>婆羅洲雨林，是地球上第三大的雨林，也是距離台灣最近的原始雨林，它的任何變化都會對台灣造成不容小覷的影響。</p>
+      <p>然而，近年來，雨林的生命因伐木商的開發正一點一滴的消逝中，我們在進入雨林後，親眼看見雨林的樹木被砍伐後，留下的只剩一片片裸露的荒地.....</p>
+      <img src="images/asset_784029_image_big.jpg" alt="雨林照片" class="large-photo">
+      <p>世世代代居住在此的原住民--本南人(Penan)，是婆羅州雨林的遊牧民族，除了少部份仍然維持遊牧生活，現在大部份已經改為定居。為了挽救婆羅洲雨林，他們毫無畏懼的以自身微弱的力量，去對抗掌握許多資源的伐木商與政府，就只為保護自己的家園。</p>
+      <p>下方照片是本南人攔路抗爭，阻擋伐木商人進入雨林的實際狀況。散居各地的本南人聚集起來，用肉身守護家園。Long Kerong的本南人頭目克萊索因為帶領族人抗爭而遭遇許多壓力。在一次入山打獵的日常活動，他竟然再也沒有回來。心急的族人們不斷尋找克萊索的身影，令人心碎的是，族人們在河邊發現了全身是傷、早已無生命徵象的克萊索......。</p>
+      <img src="images/asset_771264_image_big.jpg" alt="本南人攔路抗爭" class="large-photo">
+    </div>
+
+    <div class="reveal fade-in">
+      <h2>為什麼是電？</h2>
+      <p>本南人守護雨林的行動之一就是想辦法讓世界各地知道這裡發生的故事，如果有更多人拒絕購買盜伐的木材，那雨林的破壞就有機會減緩。因為這個想法，本南人盡可能在各地宣講，而台灣做為馬來西亞木材的進口大國，當然也是他們推廣宣講的主力。</p>
+      <p>我們團隊知道了本南人的處境後，實際走訪雨林，看看我們能為他們做什麼。發現除了購買他們的手做工藝品之外，本南人因為長期抗爭，導致很多經濟支援都進不來。就連離Mulu機場走路只要15~20分鐘的村落，至今仍沒有穩定的供電。</p>
+    </div>
+
+    <div class="reveal fade-in">
+      <h2>這個計畫已經持續十年了！！</h2>
+      <p>我們是一群由家長與小孩組織起來的團體，每年都會進入婆羅洲雨林，去到雨林中的本南人村落，為偏遠缺乏電力的村落建置太陽能供電系統，讓他們在守護森林的同時，不致於缺水又缺電，讓他們至少能維持日常生活的基本運作。</p>
+      <img src="images/asset_784044_image_big.webp" alt="本南人村落" class="large-photo">
+      <p>每一戶本南人的家庭都會收到一組LED燈管和行動電源，白天村民會把行動電源帶來充電，晚上就能為一個家庭提供基本的照明需求。照片中是我們為老奶奶安裝太陽能燈管的現場，老奶奶的笑容讓我們發現，我們習以為常的電燈，對於他們是難得的資源。本南人小孩晚上終於可以擺脫用頭燈照明寫作業的環境。</p>
+      <img src="images/asset_784056_image_big.jpg" alt="本南人村落" class="large-photo">
+      <p>自2016年起，這個計畫已經持續了十年，為11個本南部落村落建置了太陽能供電系統；然而，自今仍有10多個部落沒有太陽能電力可以使用。</p>
+      <img src="images/asset_784035_image_big.webp" alt="本南人村落" class="large-photo">
+    </div>
+
+
+    <div class="reveal fade-in">
+      <h2>我們的願景</h2>
+      <p>我們夢想一個與自然和諧共處的世界。我們希望，做一件讓世界更美麗的事。</p>
+      <div class="stats-container">
+        <div class="stat-item">
+          <div class="stat-number" data-count="9">0</div>
+          <div class="stat-label">團隊成員</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-count="11">0</div>
+          <div class="stat-label">已進行專案</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-count="121">0</div>
+          <div class="stat-label">受惠家庭</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal slide-right">
+      <h2>我們的團隊</h2>
+      <p>由來自不同背景的學生組成，我們透過學校所學的知識，共同為雨林保育努力。</p>
+
+      <div class="team-section">
+        <h3>2023團隊 <span class="toggle-icon">▼</span></h3>
+        <div class="team-grid">
+          <!-- 2023團隊-->
+          <div class="team-member">
+            <img src="images/947775d3-f287-4933-aee1-d93e7f9a9100.jpg" alt="方羽歆">
+            <h3>方羽歆</h3>
+            <p>小灰蝶</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="team-section">
+        <h3>2024團隊 <span class="toggle-icon">▼</span></h3>
+        <div class="team-grid">
+          <div class="team-member">
+            <img src="images/IMG_3684.jpeg" alt="蔡怡茜">
+            <h3>蔡詒茜</h3>
+            <p>長春藤</p>
+          </div>
+          <div class="team-member">
+            <img src="images/P1130961.jpeg" alt="廖崇棻">
+            <h3>廖崇棻</h3>
+            <p>花栗鼠</p>
+          </div>
+          <div class="team-member">
+            <img src="images/IMG_3683.jpeg" alt="吳亮岑">
+            <h3>吳亮岑</h3>
+            <p>月亮</p>
+          </div>
+          <div class="team-member">
+            <img src="images/IMG_2314.jpeg" alt="方品程">
+            <h3>方品程</h3>
+            <p>獵豹</p>
+          </div>
+          <div class="team-member">
+            <img src="images/IMG_3681.jpeg" alt="楊奕倫">
+            <h3>楊奕倫</h3>
+            <p>無尾熊</p>
+          </div>
+          <div class="team-member">
+            <img src="images/IMG_0175.jpeg" alt="林廷諺">
+            <h3>林廷諺</h3>
+            <p>小黃瓜</p>
+          </div>
+          <div class="team-member">
+            <img src="images/IMG_3692.png" alt="李沛潔">
+            <h3>李沛潔</h3>
+            <p>佩佩豬</p>
+          </div>
+          <div class="team-member">
+            <img src="images/IMG_3691.jpeg" alt="蔡承煜">
+            <h3>蔡承煜</h3>
+            <p>山豬</p>
+          </div>
+          <div class="team-member">
+            <img src="images/S__20578308_0.jpg" alt="黃昱惟">
+            <h3>黃昱惟</h3>
+            <p>黑蒙</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="team-section">
+        <h3>2025團隊 <span class="toggle-icon">▼</span></h3>
+        <div class="team-grid">
+          <!-- 2025團隊將於未來加入 -->
+           <div class="team-member">
+            <img src="images/hippopotamus.jpg" alt="江季芸">
+            <h3>江季芸</h3>
+            <p>河馬</p>
+          </div>
+           
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal fade-in">
+      <h2>加入我們的行列</h2>
+      <p>無論是捐款支持，或是分享我們的理念，您的參與都能為雨林保育帶來改變。</p>
+      <a href="#" class="button scale-in delay-1">捐款支持</a>
+    </div>
+    <div class="reveal fade-in">
+      <a href="index.html" class="button scale-in delay-1">← 返回主頁</a>
+    </div>
+
+  </div>
+
+  <footer class="reveal fade-in">
+    <p> 2025 中一翔鷹 EagleTeam. All rights reserved.</p>
+    <p>Email: tweagleteam@gmail.com</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/about.js"></script>
+</body>
+</html>

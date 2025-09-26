@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest News - Eagle Team</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+    <style>
+        body {
+            background-color: #111;
+            color: white;
+        }
+        .news-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .news-card h2 {
+            color: white;
+        }
+        .news-card p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .read-more {
+            color: #4a8f3c !important;
+        }
+        .read-more:hover {
+            color: #3a752e !important;
+        }
+        .read-more i {
+            color: inherit;
+        }
+        .news-date {
+            background-color: #4a8f3c;
+        }
+        footer {
+            background-color: #0a0a0a;
+        }
+        .footer-content {
+            color: white;
+        }
+        .footer-section p {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        .social-links a {
+            color: white;
+        }
+        .social-links a:hover {
+            color: #4a8f3c;        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index-en.html" class="logo">illuminating rainforest</a>
+            <div class="nav-links">
+                <a href="index-en.html">Home</a>
+                <a href="about-en.html">About Us</a>
+                <a href="news-en.html" class="active">News</a>
+                <a href="#donate" class="donate-btn">Donate</a>
+                <div class="language-switcher">
+                    <a href="news.html">中文</a>
+                    <a href="news-en.html" class="active">EN</a>
+                </div>
+            </div>
+            <button class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h1>Latest News</h1>
+        
+        <section class="news-section" id="newsContainer">
+            <!-- News will be loaded here dynamically -->
+            <div class="loading">Loading...</div>
+        </section>
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const newsContainer = document.getElementById('newsContainer');
+            
+            // Show loading message
+            newsContainer.innerHTML = '<div class="loading">Loading...</div>';
+            
+            // Load news data
+            fetch('data/news.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    renderNews(data.news, 'en');
+                })
+                .catch(error => {
+                    console.error('Failed to load news:', error);
+                    newsContainer.innerHTML = `
+                        <div class="error-message">
+                            <p>Failed to load news. Please try again later.</p>
+                            <p>Error details: ${error.message}</p>
+                        </div>`;
+                });
+            
+            function renderNews(newsItems, lang) {
+                if (!newsItems || !Array.isArray(newsItems) || newsItems.length === 0) {
+                    newsContainer.innerHTML = '<p>No news available at the moment.</p>';
+                    return;
+                }
+                
+                // Clear container
+                newsContainer.innerHTML = '';
+                
+                // Sort by date (newest first)
+                const sortedNews = [...newsItems].sort((a, b) => {
+                    return new Date(b.date_en) - new Date(a.date_en);
+                });
+                
+                // Render each news item
+                sortedNews.forEach(news => {
+                    const newsCard = document.createElement('div');
+                    newsCard.className = 'news-card';
+                    newsCard.innerHTML = `
+                        <div class="news-date">${news[`date_${lang}`] || ''}</div>
+                        <h2>${news[`title_${lang}`] || 'No Title'}</h2>
+                        <p>${news[`summary_${lang}`] || 'No summary available.'}</p>
+                        <div class="news-content" style="display: none;">
+                            ${news[`content_${lang}`] || ''}
+                        </div>
+                        <a href="#" class="read-more read-more-btn">Read More <i class="fas fa-arrow-right"></i></a>
+                        <a href="#" class="read-less" style="display: none;">Show Less <i class="fas fa-arrow-up"></i></a>
+                    `;
+                    newsContainer.appendChild(newsCard);
+                });
+                
+                // Add event listeners
+                setupEventListeners();
+            }
+            
+            function setupEventListeners() {
+                // Read more buttons
+                document.querySelectorAll('.read-more-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const card = e.target.closest('.news-card');
+                        const content = card.querySelector('.news-content');
+                        const readMore = card.querySelector('.read-more');
+                        const readLess = card.querySelector('.read-less');
+                        
+                        content.style.display = 'block';
+                        readMore.style.display = 'none';
+                        readLess.style.display = 'inline-block';
+                    });
+                });
+                
+                // Show less buttons
+                document.querySelectorAll('.read-less').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const card = e.target.closest('.news-card');
+                        const content = card.querySelector('.news-content');
+                        const readMore = card.querySelector('.read-more');
+                        const readLess = e.target;
+                        
+                        content.style.display = 'none';
+                        readMore.style.display = 'inline-block';
+                        readLess.style.display = 'none';
+                        
+                        // Smooth scroll to the top of the news card
+                        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    });
+                });
+            }
+        });
+    </script>
+    </main>
+    
+    <!-- Embedded News Data -->
+    <script>
+        // News data
+        const newsData = {
+            "news": [
+                {
+                    "id": "20250607",
+                    "date_zh": "2025年6月7日",
+                    "date_en": "June 7, 2025",
+                    "title_zh": "2025年照亮雨林計劃正式啟動",
+                    "title_en": "2025 Rainforest Expedition Officially Launched",
+                    "summary_zh": "我們很高興地宣布，2025年照亮雨林計劃即將啟動！今年我們將有32名志願者前往馬來西亞婆羅洲雨林，為當地的本南人村落安裝太陽能供電系統。",
+                    "summary_en": "We are thrilled to announce the official launch of our 2025 Rainforest Expedition! This year, 30+ volunteers will travel to the Borneo rainforest in Malaysia to install solar power systems for the local Penan communities.",
+                    "content_zh": "<p>我們很高興地宣布，2025年照亮雨林計劃即將啟動！今年我們將有32名志願者前往馬來西亞婆羅洲雨林，為當地的本南人村落安裝太陽能供電系統。</p><p>這次行動除了安裝太陽能板外，我們還將進行社區環保宣導，並在當地進行健康教育。這將是我們有史以來規模最大的一次行動。</p>",
+                    "content_en": "<p>We are thrilled to announce the official launch of our 2025 Rainforest Expedition! This year, 30+ volunteers will travel to the Borneo rainforest in Malaysia to install solar power systems for the local Penan communities.</p><p>The expedition will not only include solar panel installations but also feature rainforest conservation workshops and environmental education programs for local communities. This marks our largest expedition to date.</p>",
+                    "image": "images/news/20250607.jpg"
+                }
+                // Add more news items here
+            ]
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const newsContainer = document.getElementById('newsContainer');
+            
+            // Sort by date in descending order
+            const sortedNews = [...newsData.news].sort((a, b) => {
+                return new Date(b.date_en) - new Date(a.date_en);
+            });
+            
+            if (sortedNews.length === 0) {
+                newsContainer.innerHTML = '<p>No news available.</p>';
+                return;
+            }
+                    
+            // 渲染新聞卡片
+            sortedNews.forEach(news => {
+                const newsCard = document.createElement('div');
+                newsCard.className = 'news-card';
+                newsCard.innerHTML = `
+                    <div class="news-date">${news.date_en}</div>
+                    <h2>${news.title_en}</h2>
+                    <p>${news.summary_en}</p>
+                    <div class="news-content" style="display: none;">
+                        ${news.content_en}
+                    </div>
+                    <a href="#" class="read-more read-more-btn">Read More <i class="fas fa-arrow-right"></i></a>
+                    <a href="#" class="read-less" style="display: none;">Show Less <i class="fas fa-arrow-up"></i></a>
+                `;
+                newsContainer.appendChild(newsCard);
+            });
+            
+            // 添加點擊事件處理
+            document.querySelectorAll('.read-more-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const card = e.target.closest('.news-card');
+                    const content = card.querySelector('.news-content');
+                    const readMore = card.querySelector('.read-more');
+                    const readLess = card.querySelector('.read-less');
+                    
+                    content.style.display = 'block';
+                    readMore.style.display = 'none';
+                    readLess.style.display = 'inline-block';
+                });
+            });
+            
+            document.querySelectorAll('.read-less').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const card = e.target.closest('.news-card');
+                    const content = card.querySelector('.news-content');
+                    const readMore = card.querySelector('.read-more');
+                    const readLess = e.target;
+                    
+                    content.style.display = 'none';
+                    readMore.style.display = 'inline-block';
+                    readLess.style.display = 'none';
+                    
+                    // 平滑滾動到新聞頂部
+                    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            });
+        });
+    </script>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <p>Email: contact@eagleteam.org</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Eagle Team. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
